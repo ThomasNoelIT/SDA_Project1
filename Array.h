@@ -7,7 +7,6 @@
 
 #include <stddef.h>
 
-
 /* ------------------------------------------------------------------------- *
  * Create a sorted array of integers.
  *
@@ -19,7 +18,7 @@
  * RETURN
  * array        A new array of integers, or NULL in case of error
  * ------------------------------------------------------------------------- */
-int* createSortedArray(size_t length);
+int *createSortedArray(size_t length);
 
 /* ------------------------------------------------------------------------- *
  * Create an almost sorted array of integers. Start from a sorted array
@@ -34,8 +33,7 @@ int* createSortedArray(size_t length);
  * RETURN
  * array        A new array of integers, or NULL in case of error
  * ------------------------------------------------------------------------- */
-int* createAlmostSortedArray(size_t length, float prop);
-
+int *createAlmostSortedArray(size_t length, float prop);
 
 /* ------------------------------------------------------------------------- *
  * Create a decreasing array of integers.
@@ -48,8 +46,7 @@ int* createAlmostSortedArray(size_t length, float prop);
  * RETURN
  * array        A new array of integers, or NULL in case of error
  * ------------------------------------------------------------------------- */
-int* createDecreasingArray(size_t length);
-
+int *createDecreasingArray(size_t length);
 
 /* ------------------------------------------------------------------------- *
  * Create a random array of integers (from 0 to length-1).
@@ -62,25 +59,25 @@ int* createDecreasingArray(size_t length);
  * RETURN
  * array        A new array of integers, or NULL in case of error
  * ------------------------------------------------------------------------- */
-int* createRandomArray(size_t length);
+int *createRandomArray(size_t length);
 
 /* ------------------------------------------------------------------------- *
  * Compare two integer values and increment a global counter.
- * 
+ *
  * PARAMETERS
  * i1, i2       The two integers to be compared
- * 
+ *
  * RETURN
  * comp         i1-i2 (<0 if i1<i2, =0 if i1==i2, >0 if i1>i2)
  * ------------------------------------------------------------------------- */
 
-int intCmp(int i1,int i2);
+int intCmp(int i1, int i2);
 
 /* ------------------------------------------------------------------------- *
  * Get the value of the global counter
- * 
+ *
  * RETURN
- * count        The number of calls to intCmp since the last call to 
+ * count        The number of calls to intCmp since the last call to
  *              resetCounter
  * ------------------------------------------------------------------------- */
 
@@ -88,7 +85,7 @@ size_t getCounter(void);
 
 /* ------------------------------------------------------------------------- *
  * Reset the value of the global counter
- * 
+ *
  * ------------------------------------------------------------------------- */
 
 void resetCounter(void);

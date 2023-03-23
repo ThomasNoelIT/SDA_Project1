@@ -7,10 +7,12 @@
 #include "Sort.h"
 #include "Array.h"
 
-void sort(int* array, size_t length)
+void sort(int *array, size_t length)
 {
-    if (!array)
+    if (!array){
         return;
+    }
+        
 
     int j;
     int tmp;
@@ -20,11 +22,11 @@ void sort(int* array, size_t length)
         tmp = array[i];
         j = i;
         // Place tmp at the right position
-        while(j > 0 && intCmp(array[j-1],tmp)>0)
+        while (j > 0 && intCmp(array[j - 1], tmp) > 0)
         {
-            array[j] = array[j-1];
+            array[j] = array[j - 1];
             j--;
         }
-        array[j]=tmp;
+        array[j] = tmp;
     }
 }

@@ -7,7 +7,6 @@
 
 #include <stddef.h>
 
-
 /* ------------------------------------------------------------------------- *
  * Sort an array of integers.
  *
@@ -15,7 +14,6 @@
  * array        The array to sort
  * length       Number of elements in the array
  * ------------------------------------------------------------------------- */
-void sort(int* array, size_t length);
-
+void sort(int *array, size_t length);
 
 #endif // !_SORT_H_
