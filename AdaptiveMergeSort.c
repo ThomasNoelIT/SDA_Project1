@@ -83,7 +83,7 @@ static StackElement peek(Stack* stack) {
     return data;
 }*/
 
-static void print_stack(struct Stack* s) {
+/*static void print_stack(struct Stack* s) {
     int i;
     if (isEmpty(s)) {
         printf("Stack is empty\n");
@@ -93,75 +93,17 @@ static void print_stack(struct Stack* s) {
             printf("start = %ld, end = %ld\n", s->data[i].start,s->data[i].end);
         }
     }
-}
+}*/
 
 
 // Libère la mémoire allouée pour la pile
 static void deleteStack(Stack* stack) {
+    //printf("je free les datas\n");
     free(stack->data);
+    //printf("je free le stack\n");
     free(stack);
+    
 }
-
-
-
-
-/*
-typedef struct Stack {
-    int Max_Size;
-    int* data; // Tableau qui contient les éléments de la pile
-    int top; // Indice de sommet de pile
-} Stack;
-
-// Fonction pour créer une pile vide
-static Stack* createStack(size_t size) {
-    Stack* stack = (Stack*) malloc(sizeof(Stack)); // Alloue la mémoire pour la pile
-    stack->Max_Size = size;
-    stack->data = (int*) malloc(sizeof(int) * size); // Alloue la mémoire pour le tableau de données de la pile
-    stack->top = -1; // Initialise l'indice de sommet de pile à -1
-    return stack;
-}
-
-// Fonction pour empiler un entier dans la pile
-static void push(Stack* stack, int element) {
-    if (intCmp(stack->top, stack->Max_Size - 1) == 0) {
-        printf("error1\n");
-    } else {
-        stack->top++;
-        stack->data[stack->top] = element;
-    }
-}
-
-// Fonction pour dépiler un entier de la pile
-static int pop(Stack* stack) {
-    if (intCmp(stack->top, -1) == 0) {
-        printf("error2\n");
-        return -1;
-    } else {
-        int element = stack->data[stack->top];
-        stack->top--;
-        return element;
-    }
-}*/
-
-/*
-static void display(Stack* stack) {
-    if (stack->top == -1) {
-        printf("Stack is empty\n");
-    } else {
-        printf("Stack elements:\n");
-        int i;
-        for (i = stack->top; i >= 0; i--) {
-            printf("%d ", stack->data[i]);
-        }
-        printf("\n");
-        printf("nbr data ds la pile = %d \n",stack->top);
-        printf("top pile = %d \n",stack->top);
-    }
-}*/
-
-
-
-
 
 
 int findRun(int *array, size_t start,size_t last, size_t minSize);
@@ -361,31 +303,59 @@ int findRun(int *array, size_t start, size_t last, size_t minSize){
         return out;*/
 }
 
-/*
-void fusion(int* tableau1, int taille1, int* tableau2, int taille2, int* resultat) {
-    int i = 0, j = 0, k = 0;
-    
-    // Parcours les deux tableaux en comparant les éléments et en les fusionnant
-    while (i < taille1 && j < taille2) {
-        if (tableau1[i] < tableau2[j]) {
-            resultat[k++] = tableau1[i++];
-        } else {
-            resultat[k++] = tableau2[j++];
-        }
-    }
-    
-    // Ajoute les éléments restants du premier tableau
-    while (i < taille1) {
-        resultat[k++] = tableau1[i++];
-    }
-    
-    // Ajoute les éléments restants du deuxième tableau
-    while (j < taille2) {
-        resultat[k++] = tableau2[j++];
-    }
-}*/
+
+static void mergeSortAux(int tab[], int lo, int hi, int aux[])
+{
+    int n = hi - lo + 1;
+    if (n <= 1)
+        return;
+    int mid = lo + (n + 1) / 2;
+    mergeSortAux(tab, lo, mid - 1, aux);
+    mergeSortAux(tab, mid, hi, aux);
+    merge(tab, lo, mid, hi, aux);
+}
 
 void static fusion(int *array, Stack* stack,size_t length){
+    /*
+    //réarrangement par fusion des sous tableaux avec les =/= cas comme dans pdf
+    for (int k = (length - 1); k > 0; --k)
+    {
+        if (k >= 2)
+        {
+            if (lgs[k - 2] <= lgs[k - 1] + lgs[k])
+            {
+                if (lgs[k] >= lgs[k - 2])
+                {
+                    indexs[k - 2][1] = indexs[k - 1][1];
+                    lgs[k - 2] += lgs[k - 1];
+                    mergeSortAux(array, indexs[k - 2][0], indexs[k - 2][1], aux);
+
+                    indexs[k - 1][0] = indexs[k][0];
+                    indexs[k - 1][1] = indexs[k][1];
+                    lgs[k - 1] = lgs[k];
+                }
+                else if (lgs[k] < lgs[k - 2])
+                {
+                    indexs[k - 1][1] = indexs[k][1];
+                    lgs[k - 1] += lgs[k];
+                    mergeSortAux(array, indexs[k - 1][0], indexs[k - 1][1], aux);
+                }
+            }
+            else if(lgs[k - 1] < lgs[k])
+            {
+                indexs[k - 1][1] = indexs[k][1];
+                lgs[k - 1] += lgs[k];
+                mergeSortAux(array, indexs[k - 1][0], indexs[k - 1][1], aux);
+            }
+        }
+        else
+        {
+            indexs[k - 1][1] = indexs[k][1];
+            lgs[k - 1] += lgs[k];
+            mergeSortAux(array, indexs[k - 1][0], indexs[k - 1][1], aux);
+        }
+    }*/
+    
     StackElement temp_A;
     StackElement temp_B;
     StackElement temp_C;
@@ -403,225 +373,94 @@ void static fusion(int *array, Stack* stack,size_t length){
     int size_temp_B;
     int size_temp_C;
 
-    int n;
-    int mid;
+    int i = length;
 
+    /*
     int work = 1;
     if(stack->top < 2){
         work = 0;
+    }*/
+
+    //while(work == 1){
+    if(stack->top < 2){
+        i = 1;
     }
-
-    while(work == 1){
-        work = 0;
-            temp_C = pop(stack);
-            temp_B = pop(stack);
-            temp_A = pop(stack);
+    
+    for(; i >1; i--){
+        
+        //i++;
+        //printf("je rentre dans la fusion pour la %d fois\n",i);
+    
+        //for (int k = (length - 1); k > 0; --k){
+        //work = 0;
+        temp_C = pop(stack);
+        temp_B = pop(stack);
+        temp_A = pop(stack);
+        
             
-            temp_A_start = temp_A.start;
-            temp_B_start = temp_B.start;
-            temp_C_start = temp_C.start;
+        temp_A_start = temp_A.start;
+        temp_B_start = temp_B.start;
+        temp_C_start = temp_C.start;
 
-            temp_A_end = temp_A.end;
-            temp_B_end = temp_B.end;
-            temp_C_end = temp_C.end;
+        temp_A_end = temp_A.end;
+        temp_B_end = temp_B.end;
+        temp_C_end = temp_C.end;
 
-            size_temp_A = temp_A_end - temp_A_start;
-            size_temp_B = temp_B_end - temp_B_start;
-            size_temp_C = temp_C_end - temp_C_start;
-            if(size_temp_A <= size_temp_B + size_temp_C){
-                if(size_temp_A < size_temp_C){
-                    work = 1;
-                    //fusion A et B
-                    n = temp_B_end - temp_A_start + 1;
-                    if (n <= 1)
-                        return;
-                    mid = temp_A_start + (n + 1) / 2;
+        size_temp_A = temp_A_end - temp_A_start;
+        size_temp_B = temp_B_end - temp_B_start;
+        size_temp_C = temp_C_end - temp_C_start;
 
-                    merge(array,temp_A_start,mid,temp_B_end,aux);
-                    push(stack,temp_A_start,temp_B_end);
-                    push(stack,temp_C_start,temp_C_end);
-                }else{
-                    work = 1;
-                    //fusion B et C
-                    n = temp_C_end - temp_B_start + 1;
-                    if (n <= 1)
-                        return;
-                    mid = temp_B_start + (n + 1) / 2;
+        if(size_temp_A <= size_temp_B + size_temp_C){
+            if(size_temp_A < size_temp_C){
+                //work = 1;
+                //fusion A et B
 
-                    merge(array,temp_B_start,mid,temp_C_end,aux);
-                    push(stack,temp_A_start,temp_A_end);
-                    push(stack,temp_B_start,temp_C_end);
-                }
-            }else if(size_temp_B <= size_temp_C){
-                work = 1;
+                mergeSortAux(array,temp_A_start,temp_B_end,aux);
+                push(stack,temp_A_start,temp_B_end);
+                push(stack,temp_C_start,temp_C_end);
+            }else{
+                //work = 1;
                 //fusion B et C
-                n = temp_C_end - temp_B_start + 1;
-                    if (n <= 1)
-                        return;
-                mid = temp_B_start + (n + 1) / 2;
 
-                merge(array,temp_B_start,mid,temp_C_end,aux);
+                mergeSortAux(array,temp_B_start,temp_C_end,aux);
                 push(stack,temp_A_start,temp_A_end);
                 push(stack,temp_B_start,temp_C_end);
             }
-
-    }
-}
-
-/*
-void static fusion(int *array, Stack* stack,size_t length){
-
-    StackElement temp_A;
-    StackElement temp_B;
-    StackElement temp_C;
-    int aux[length];
-
-    int temp_A_start;
-    int temp_B_start;
-    int temp_C_start;
-
-    int temp_A_end;
-    int temp_B_end;
-    int temp_C_end;
-
-    int size_temp_A;
-    int size_temp_B;
-    int size_temp_C;
-
-    int n;
-    int mid;
-
-
-
-    while (stack->top > 0){
-       
-        if (stack->top > 1){
-
-            temp_C = pop(stack);
-            temp_B = pop(stack);
-            temp_A = pop(stack);
-            
-            temp_A_start = temp_A.start;
-            temp_B_start = temp_B.start;
-            temp_C_start = temp_C.start;
-
-            temp_A_end = temp_A.end;
-            temp_B_end = temp_B.end;
-            temp_C_end = temp_C.end;
-
-            size_temp_A = temp_A_end - temp_A_start;
-            size_temp_B = temp_B_end - temp_B_start;
-            size_temp_C = temp_C_end - temp_C_start;
-            
-            if(size_temp_A <= size_temp_B + size_temp_C){
-                if(size_temp_A < size_temp_C){
-                    //fusion A et B
-                    n = temp_B_end - temp_A_start + 1;
-                    if (n <= 1)
-                        return;
-                    mid = temp_A_start + (n + 1) / 2;
-
-                    merge(array,temp_A_start,mid,temp_B_end,aux);
-                    push(stack,temp_A_start,temp_B_end);
-                    push(stack,temp_C_start,temp_C_end);
-                }else{
-                    //fusion B et C
-                    n = temp_C_end - temp_B_start + 1;
-                    if (n <= 1)
-                        return;
-                    mid = temp_B_start + (n + 1) / 2;
-
-                    merge(array,temp_B_start,mid,temp_C_end,aux);
-                    push(stack,temp_A_start,temp_A_end);
-                    push(stack,temp_B_start,temp_C_end);
-                }
-            }else if(size_temp_B <= size_temp_C){
-                //fusion B et C
-                n = temp_C_end - temp_B_start + 1;
-                    if (n <= 1)
-                        return;
-                mid = temp_B_start + (n + 1) / 2;
-
-                merge(array,temp_B_start,mid,temp_C_end,aux);
-                push(stack,temp_A_start,temp_A_end);
-                push(stack,temp_B_start,temp_C_end);
-            }
-        }else{
-            temp_B = pop(stack);
-            temp_A = pop(stack);
-
-            n = temp_B_end - temp_A_start + 1;
-                    if (n <= 1)
-                        return;
-            mid = temp_A_start + (n + 1) / 2;
-
-            merge(array,temp_A_start,mid,temp_B_end,aux);
-            push(stack,temp_A_start,temp_B_end);
-        }
-    }
-}*/
-
-/*
-void static fusion(int *array, Stack* stack){
-
-    if (stack->top <= 1) {
-        return;
-    }
-
-    StackElement temp_A;
-    StackElement temp_B;
-    StackElement temp_C;
-
-    int temp_A_start;
-    int temp_B_start;
-    int temp_C_start;
-
-    int temp_A_end;
-    int temp_B_end;
-    int temp_C_end;
-
-    int size_temp_A;
-    int size_temp_B;
-    int size_temp_C;
-
-    temp_C = pop(stack);
-    temp_B = pop(stack);
-    temp_A = pop(stack);
-
-    temp_A_start = temp_A.start;
-    temp_B_start = temp_B.start;
-    temp_C_start = temp_C.start;
-
-    temp_A_end = temp_A.end;
-    temp_B_end = temp_B.end;
-    temp_C_end = temp_C.end;
-
-    size_temp_A = temp_A_end - temp_A_start;
-    size_temp_B = temp_B_end - temp_B_start;
-    size_temp_C = temp_C_end - temp_C_start;
-
-
-    if(size_temp_A <= size_temp_B + size_temp_C){
-        if(size_temp_A < size_temp_C){
-            //fusion A et B
-            merge(array,temp_A_start,temp_B_end);
-            push(stack,temp_A_start,temp_B_end);
-            push(stack,temp_C_start,temp_C_end);
-        }else{
+        }else if(size_temp_B <= size_temp_C){
+            //work = 1;
             //fusion B et C
-            merge(array,temp_B_start,temp_C_end);
+
+            mergeSortAux(array,temp_B_start,temp_C_end,aux);
             push(stack,temp_A_start,temp_A_end);
             push(stack,temp_B_start,temp_C_end);
         }
-    }else if(size_temp_B <= size_temp_C){
-        //fusion B et C
-        insertion(array,temp_B_start,temp_C_end);
-        push(stack,temp_A_start,temp_A_end);
-        push(stack,temp_B_start,temp_C_end);
+
+        /*
+        if(stack->top < 2){
+            work = 0;
+        }*/
     }
 
-    fusion(array, stack);
-}*/
+    //printf("je me tire de la boucle\n");
+
+
+    if(stack->top > 0){
+        //printf("je fusionne les reste\n");
+        //print_stack(stack);
+
+        temp_B = pop(stack);
+        temp_A = pop(stack);
+
+        temp_A_start = temp_A.start;
+        temp_B_end = temp_B.end;
+
+        mergeSortAux(array,temp_A_start,temp_B_end,aux);
+        //print_stack(stack);
+        push(stack,temp_A_start,temp_B_end);
+    }
+    //print_stack(stack);
+    //printf("fini la fusion\n");
+}
 
 void static adaptiveMerge_sort(int *array, Stack* stack,size_t length){
     size_t start = 0;
@@ -635,6 +474,8 @@ void static adaptiveMerge_sort(int *array, Stack* stack,size_t length){
     printf("\n");*/
     //clock_t begin = clock();
     //printf("fin print\n");
+
+
 
     for(size_t i = 0; i < length; i++){
         //print_stack(stack);
@@ -650,17 +491,21 @@ void static adaptiveMerge_sort(int *array, Stack* stack,size_t length){
         //printf("fin fusion\n");
         //print_stack(stack);
 	}
-    if(stack->top > 0){
-        int n;
-        int mid;
-        int aux[length];
-    
 
+
+    if(stack->top > 0){
+        //printf("je fusionne les reste\n");
+        //print_stack(stack);
+        
         StackElement temp_A;
         StackElement temp_B;
+    
+
         int temp_A_start;
         int temp_B_end;
 
+        int aux[length];
+        
 
         temp_B = pop(stack);
         temp_A = pop(stack);
@@ -668,357 +513,27 @@ void static adaptiveMerge_sort(int *array, Stack* stack,size_t length){
         temp_A_start = temp_A.start;
         temp_B_end = temp_B.end;
 
-        n = temp_B_end - temp_A_start + 1; 
-        if (n <= 1)
-            return;
-        mid = temp_A_start + (n + 1) / 2;
-
-        merge(array,temp_A_start,mid,temp_B_end,aux);
+        mergeSortAux(array,temp_A_start,temp_B_end,aux);
+        //print_stack(stack);
         push(stack,temp_A_start,temp_B_end);
     }
-    //printf("fin code\n");
-
-    //printf("array length -1 = %d\n",array[length-1]);
-    /*
-    clock_t finish = clock();
-    unsigned long millis = (finish -  begin) * 1000 / CLOCKS_PER_SEC;
-    printf( "findrun finish in %ld ms\n", millis );  */
-    //print_stack(stack);
-
-    /*
-    for (size_t i = 0; i < length; i++) {
-        //printf("i = %ld\n",i);
-        printf("%d ", array[i]);
-    }
-    printf("\n");*/
-    
-    
-    //begin = clock();
-
-    
-
-    
-
-    /*
-    finish = clock();
-    millis = (finish -  begin) * 1000 / CLOCKS_PER_SEC;
-    printf( "fusion finish in %ld ms\n", millis );  */
-
     /*
     for (size_t i = 0; i < length; i++) {
         printf("%d ", array[i]);
     }
     printf("\n");*/
     
-}
-
-
-/*
-//A PRENDRE SI LES PILES SONT AUTORISEES
-void static fusion(int *array, Stack* stack_result_findRun,size_t length){
-
-	int end = 0;
-	double nb_array = length/4; //0.1 for 10 | 0.01 for 100 | 0.025 for 40 | 0.02 for 50 arrays
-	long double preMinSize = length/nb_array;
-	int minSize = (int) preMinSize;
-
-    int temp1;
-    int temp2;
-    int temp3;
-    int temp4;
-
-    int temp[3];
-
-    int size_temp1;
-    int size_temp2;
-    int size_temp3;
-
-    //printf("10\n");
-    //printf("length = %ld \n",length);
-    //display(stack_result_findRun);
-
-    for(size_t i = 0; i < length; i++){
-		end = findRun(array, i, length-1, minSize);
-		i = end;
-        //printf("end =%d \n",end);
-		push(stack_result_findRun ,end);
-	}
-
-    //printf("11\n");
-
-    //display(stack_result_findRun);
-
-    //printf("12\n");
-
-    //gérer le cas nb_array<2
-	while (stack_result_findRun->top > 0){
-
-        //printf("13\n");
-		//int j = 0;
-		if (intCmp(stack_result_findRun->top, 2) > 0){ //nb_array must have a value of 3 to be able to compute the following if
-            //printf("14\n");
-            //display(stack_result_findRun);
-            temp1 = pop(stack_result_findRun);
-            temp2 = pop(stack_result_findRun);
-            temp3 = pop(stack_result_findRun);
-            temp4 = pop(stack_result_findRun);//dépassement tab
-
-            size_temp1 = temp1-temp2;
-            size_temp2 = temp2-temp3;
-            size_temp3 = temp3 - temp4;
-            
-            
-            //printf("15\n");
-			if (size_temp3 <= size_temp2+size_temp1){
-                //printf("16\n");
-                //temp = temp1;
-                if(size_temp1 < size_temp3){
-                    //fusion temp2 et temp1
-
-                    insertion(array, temp3, temp1);
-                    push(stack_result_findRun,temp4);
-                    push(stack_result_findRun,temp3);
-                    push(stack_result_findRun,temp1);
-                    
-                }else{
-                    //fusion temp2 et temp3
-
-                    insertion(array, temp4, temp2);
-                    push(stack_result_findRun,temp4);
-                    push(stack_result_findRun,temp2);
-                    push(stack_result_findRun,temp1);
-                }
-				
-				
-                //printf("17\n");
-    		}else{ //error
-            //printf("19\n");
-            
-			//fusionner temp1 et temp2
-			insertion(array, temp3, temp1);
-            push(stack_result_findRun,temp4);
-            push(stack_result_findRun,temp3);
-            push(stack_result_findRun,temp1);
-			
-            //printf("20\n");
-		    }
-            //printf("18\n");
-		}else{
-            
-            //reverse_stack(stack_result_findRun,stack_result_findRun->top);
-            
-            //printf("10\n");
-            //for(int i = 0; i < stack_result_findRun->top;i++){
-                //printf("11\n");
-                //temp[i] = pop(stack_result_findRun);
-                //temp[i+1] = pop(stack_result_findRun);
-                //if(temp[i+1]==-1){
-                    //break;
-                //}
-                //insertion(array, temp[i], temp[i+1]);
-                //push(stack_result_findRun,temp[i]);
-            //} 
-            printf("12\n");
-            //printf("\n");
-            
-            
-            //printf("19\n");
-            temp1 = pop(stack_result_findRun);
-            temp2 = pop(stack_result_findRun);
-            temp3 = pop(stack_result_findRun);
-
-            if(stack_result_findRun->top != -1){
-                printf("pile is not empty");
-            }
-
-			
-			insertion(array, 0, temp1);
-            push(stack_result_findRun,temp1);
-			
-            //printf("20\n");
-		}
-        //printf("21\n");
-    }
-    //printf("22\n");
-    //display(stack_result_findRun);
+    
 
     
-}*/
 
-
-
-
-
-
-//-----------------------------------------------------------------------------------//
-//sans findrun
-
-/*
-#define INSERTION_SORT_THRESHOLD 10
-
-static void merge(int arr[], int left[], int left_size, int right[], int right_size) {
-    int i = 0, j = 0, k = 0;
-    while (i < left_size && j < right_size) {
-        if (left[i] <= right[j]) {
-            arr[k++] = left[i++];
-        } else {
-            arr[k++] = right[j++];
-        }
-    }
-    while (i < left_size) {
-        arr[k++] = left[i++];
-    }
-    while (j < right_size) {
-        arr[k++] = right[j++];
-    }
-}
-
-static void merge_sort(int arr[], int n) {
-    if (n <= 1) {
-        return;
-    }
-    if (n <= INSERTION_SORT_THRESHOLD) {
-        // Utilisation de l'algorithme d'insertion sort pour les petits sous-tableaux
-        for (int i = 1; i < n; i++) {
-            int key = arr[i];
-            int j = i - 1;
-            while (j >= 0 && arr[j] > key) {
-                arr[j + 1] = arr[j];
-                j--;
-            }
-            arr[j + 1] = key;
-        }
-    } else {
-        int mid = n / 2;
-        int* left = (int*) malloc(mid * sizeof(int));
-        int* right = (int*) malloc((n - mid) * sizeof(int));
-        for (int i = 0; i < mid; i++) {
-            left[i] = arr[i];
-        }
-        for (int i = mid; i < n; i++) {
-            right[i - mid] = arr[i];
-        }
-        merge_sort(left, mid);
-        merge_sort(right, n - mid);
-        merge(arr, left, mid, right, n - mid);
-        free(left);
-        free(right);
-    }
-}
-*/
-
-
-//-----------------------------------------------------------------------------------//
-//avec findrun
-
-/*
-static int findRun(int *array, int start,int last, int minSize) {
-    int end = start + 1;
-    int n = last-start;
-        
-    //printf("20\n");
-
-    // Trouver la fin du sous-tableau trié croissant
-    while (end < n && array[end] >= array[end-1])
-        end++;
-    //printf("21\n");
-    // Si la longueur du sous-tableau trié est inférieure à minSize
-    if (end - start < minSize) {
-        //printf("22\n");
-        // Insérer les éléments suivants dans le sous-tableau trié
-        for (int i = start + 1; i < end; i++) {
-            //printf("23\n");
-            int key = array[i];
-            int j = i - 1;
-            while (j >= start && array[j] > key) {
-                //printf("24\n");
-                array[j+1] = array[j];
-                j--;
-            }
-            //printf("25\n");
-            array[j+1] = key;
-        }
-    }
-    // Si le sous-tableau trié est dans l'ordre inverse
-    else if (array[start] > array[end-1]) {
-        //printf("26\n");
-        swap(array+start, array+end);
-    }
-    //printf("27\n");
-    // Renvoyer la fin du sous-tableau trié
-    return end-1;
-}
-
-// Fonction de fusion de deux sous-tableaux triés de A
-static void merge(int *array, int start, int mid, int end) {
-    int p = start, q = mid+1;
-    int B[end-start+1], k = 0;
     
-    //printf("10\n");
-    // Fusionner les deux sous-tableaux triés en un tableau trié
-    for (int i = start; i <= end; i++) {
-        //printf("11\n");
-        if (p > mid)
-            B[k++] = array[q++];
-        else if (q > end)
-            B[k++] = array[p++];
-        else if (array[p] <= array[q])
-            B[k++] = array[p++];
-        else
-            B[k++] = array[q++];
-    }
-    //printf("12\n");
-    
-    // Copier le tableau trié dans A
-    for (int i = 0; i < k; i++)
-        array[start+i] = B[i];
-    //printf("13\n");
 }
-
-// Fonction principale de tri par fusion adaptatif de A
-static void adaptiveMergeSort(int *array, int start, int end, int minSize) {
-    if (start < end) {
-        // Trouver le sous-tableau trié de A[start...end]
-        //printf("3\n");
-        int mid = findRun(array, start,end, minSize);
-        //printf("4\n");
-        // Fusionner les deux sous-tableaux triés de A[start...mid] et A[mid+1...end]
-        adaptiveMergeSort(array, start, mid, minSize);
-        //printf("5\n");
-        adaptiveMergeSort(array, mid+1, end, minSize);
-        //printf("6\n");
-        merge(array, start, mid, end);
-        //printf("7\n");
-    }
-}*/
 
 
 void sort(int *array, size_t length){
 
     void resetCounter();
-
-    //-----------------------------------------------------------------------------------//
-    //sans findrun
-    /*
-    int minSize = 32;
-    adaptiveMergeSort(array,0,length-1,minSize);
-
-
-
-    */
-    //-----------------------------------------------------------------------------------//
-    //avec findrun mais lent
-    /*
-    merge_sort(array, length);
-    */
-
-
-
-
-   //-----------------------------------------------------------------------------------//
-    //V1
-
-
     Stack* stack = createStack(length);
     adaptiveMerge_sort(array,stack,length);
     deleteStack(stack);
