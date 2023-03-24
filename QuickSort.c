@@ -6,12 +6,15 @@
 #include "Sort.h"
 #include "Array.h"
 #include "stdio.h"
-//#include "pthread.h"
 #include <stdlib.h>
 
+void swap(int *var1, int *var2);
+int partitioning(int *array, int bottom, int top);
+void quicksort(int *array, int bottom, int top);
+void sort(int *array, size_t length);
 
 //fonction de base : swap les pointeurs des éléments
-void static swap(int *var1, int *var2) {        
+void swap(int *var1, int *var2) {        
     int temporary_var;
     temporary_var = *var1;
     *var1 = *var2;
@@ -19,7 +22,7 @@ void static swap(int *var1, int *var2) {
 }
 
 
-int static partitioning(int *array, int bottom, int top) {
+int partitioning(int *array, int bottom, int top) {
     int pivot = array[top];
     int i = (bottom - 1);
 
@@ -33,7 +36,7 @@ int static partitioning(int *array, int bottom, int top) {
     return (i + 1);
 }
 
-void static quicksort(int *array, int bottom, int top) {
+void quicksort(int *array, int bottom, int top) {
     if (bottom < top) {
         int pi = partitioning(array, bottom, top);
 

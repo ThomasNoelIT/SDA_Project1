@@ -7,7 +7,6 @@
 #include "Array.h"
 #include "stdio.h"
 #include <stdlib.h>
-#include <time.h> 
 
 typedef struct StackElement {
     size_t start;
@@ -39,9 +38,7 @@ void adaptiveMerge_sort(int *array,size_t length);
 
 // Initialise une pile vide
 Stack* createStack(size_t size) {
-
     Stack* stack = (Stack*)malloc(sizeof(Stack));
-
     stack->max_size = size;
     stack->data = (StackElement*)malloc(sizeof(StackElement) * size);
     stack->top = 0;
@@ -79,13 +76,14 @@ StackElement pop(Stack* stack) {
         d.end = 0;
         return d;
     }
-    int top = stack->top--;
+    stack->top--;
+    int top = stack->top;
     d = stack->data[top];
     stack->data[top].end = 0;
     stack->data[top].start = 0;
     return d;
 }
-void print_stack(struct Stack* s) {
+/*void print_stack(struct Stack* s) {
     int i;
     if (isEmpty(s)) {
         printf("Stack is empty\n");
@@ -95,16 +93,14 @@ void print_stack(struct Stack* s) {
             printf("start = %ld, end = %ld\n", s->data[i].start,s->data[i].end);
         }
     }
-}
+}*/
 
 // Libère la mémoire allouée pour la pile
 void deleteStack(Stack* stack) {
     if(stack == NULL){
         return;
     }
-    //printf("je free les datas\n");
     free(stack->data);
-    //printf("je free le stack\n");
     free(stack);
     
 }
@@ -245,6 +241,7 @@ int findRun(int *array, size_t start, size_t last, size_t minSize){
 void fusion(int *array, Stack* stack,int*aux){
 
     if(stack->top == 1){
+        printf("le top  vaut == 1\n");
         return;  
     }
 
@@ -264,16 +261,16 @@ void fusion(int *array, Stack* stack,int*aux){
     int size_temp_B;
     int size_temp_C;
 
-    
-    //printf("10\n");
+    printf("10\n");
     while(1){   
 
-    //for(int i = length-1; i >=1; i--){
+        print_stack(stack);
 
         //printf("je rentre ds la boucle \n");
-        //printf("11\n");
-        if(stack->top <= 2){
-            /*//printf("22\n");
+        printf("11\n");
+        /*if(stack->top <= 2){
+            printf("le top  vaut == 2\n");
+            //printf("22\n");
             temp_A = pop(stack);
             temp_B = pop(stack);
             //printf("23\n");
@@ -287,88 +284,134 @@ void fusion(int *array, Stack* stack,int*aux){
             //printf("B end = %d\n", temp_B_end);
 
             merge(array,temp_A_start,temp_B_start,temp_B_end,aux);
-            push(stack,temp_A_start,temp_B_end);*/
+            push(stack,temp_A_start,temp_B_end);
 
             return;
             
-        }
+        }*/
 
-        //printf("21\n");
+        if(stack->top >2){
+            printf("12\n");
 
 
+            temp_A = pop(stack);
+            temp_B = pop(stack);
+            temp_C = pop(stack);
         
-        temp_C = pop(stack);
-        temp_B = pop(stack);
-        temp_A = pop(stack);
+        
         
             
-        temp_A_start = temp_A.start;
-        temp_B_start = temp_B.start;
-        temp_C_start = temp_C.start;
+            temp_A_start = temp_A.start;
+            temp_B_start = temp_B.start;
+            temp_C_start = temp_C.start;
 
-        //printf("temp_A_start = %d\n",temp_A_start);
-        if(temp_A_start < 0){
-            //printf("temp_A_start = %d\n",temp_A_start);
-            return;
-        }
+            temp_A_end = temp_A.end;
+            temp_B_end = temp_B.end;
+            temp_C_end = temp_C.end;
 
-        temp_A_end = temp_A.end;
-        temp_B_end = temp_B.end;
-        temp_C_end = temp_C.end;
+            size_temp_A = temp_A_end - temp_A_start+1;
+            size_temp_B = temp_B_end - temp_B_start+1;
+            size_temp_C = temp_C_end - temp_C_start+1;
 
-        size_temp_A = temp_A_end - temp_A_start+1;
-        size_temp_B = temp_B_end - temp_B_start+1;
-        size_temp_C = temp_C_end - temp_C_start+1;
+            printf("A start = %d\n", temp_A_start);
+            printf("A end = %d\n", temp_A_end);
+            printf("B start = %d\n", temp_B_start);
+            printf("B end = %d\n", temp_B_end);
+            printf("C start = %d\n", temp_C_start);
+            printf("C end = %d\n", temp_C_end);
 
-        //printf("12\n");
-        if(size_temp_A <= size_temp_B + size_temp_C){
-            //printf("14\n");
-            if(size_temp_A <= size_temp_C){
-                //printf("16\n");
-                //work = 1;
-                //fusion A et B
+            printf("size_temp_A = %d\n", size_temp_A);
+            printf("size_temp_B = %d\n", size_temp_B);
+            printf("size_temp_C = %d\n", size_temp_C);
 
-                merge(array,temp_A_start,temp_B_start,temp_B_end,aux);
-                push(stack,temp_A_start,temp_B_end);
-                push(stack,temp_C_start,temp_C_end);
-                //printf("17\n");
-            }else{
-                //printf("18\n");
+            //printf("12\n");
+            if(size_temp_C <= size_temp_B + size_temp_A){
+                //printf("14\n");
+                if(size_temp_A <= size_temp_C){
+                    printf("fus AB\n");
+                    //printf("16\n");
+                    //work = 1;
+                    //fusion A et B
+
+                    /*merge(array,temp_C_start,temp_B_start,temp_B_end,aux);
+                    push(stack,temp_C_start,temp_B_end);
+                    push(stack,temp_A_start,temp_A_end);*/
+
+                    merge(array,temp_B_start,temp_A_start,temp_A_end,aux);
+                    push(stack,temp_C_start,temp_C_end);
+                    push(stack,temp_B_start,temp_A_end);
+                
+                    //printf("17\n");
+                }else{
+                    printf("fus BC\n");
+                    //printf("18\n");
+                    //work = 1;
+                    //fusion B et C
+
+
+                    /*merge(array,temp_B_start,temp_A_start,temp_A_end,aux);
+                    push(stack,temp_C_start,temp_C_end);
+                    push(stack,temp_B_start,temp_A_end);*/
+
+                    merge(array,temp_C_start,temp_B_start,temp_B_end,aux);
+                    push(stack,temp_C_start,temp_B_end);
+                    push(stack,temp_A_start,temp_A_end);
+                    //printf("19\n");
+
+                }
+                //printf("15\n");
+            }else if(size_temp_B <= size_temp_A){
+                printf("égale => fus BC\n");
                 //work = 1;
                 //fusion B et C
-
-                merge(array,temp_B_start,temp_C_start,temp_C_end,aux);
+                merge(array,temp_B_start,temp_A_start,temp_A_end,aux);
+                push(stack,temp_C_start,temp_C_end);
+                push(stack,temp_B_start,temp_A_end);
+            }else{
+                printf("pas d action\n\n");
+                push(stack,temp_C_start,temp_C_end);
+                push(stack,temp_B_start,temp_B_end);
                 push(stack,temp_A_start,temp_A_end);
-                push(stack,temp_B_start,temp_C_end);
-                //printf("19\n");
-
+            
+                return;
             }
-            //printf("15\n");
-        }else if(size_temp_B <= size_temp_C){
+        }else if(size_temp_B <= size_temp_A){
+            printf("égale => fus BC\n");
+            temp_A = pop(stack);
+            temp_B = pop(stack);
+
+            temp_A_start = temp_A.start;
+            temp_B_start = temp_B.start;
+
+            temp_A_end = temp_A.end;
+            temp_B_end = temp_B.end;
             //work = 1;
             //fusion B et C
-
-            merge(array,temp_B_start,temp_C_start,temp_C_end,aux);
-            push(stack,temp_A_start,temp_A_end);
-            push(stack,temp_B_start,temp_C_end);
+            merge(array,temp_B_start,temp_A_start,temp_A_end,aux);
+            push(stack,temp_B_start,temp_A_end);
+            return;
         }else{
-            push(stack,temp_A_start,temp_A_end);
-            push(stack,temp_B_start,temp_B_end);
-            push(stack,temp_C_start,temp_C_end);
-            break;
+            printf("pas d action\n\n");
+            return;
         }
+
+        
         //printf("13\n");
     }
 }
 
 void adaptiveMerge_sort(int *array,size_t length){
 
-    int minSize = 5;
+    int minSize = 32;
     Stack* stack = createStack((int)(length/minSize)+1);
     size_t end = 0;
 
     int aux[length];
-    
+    for (size_t i = 0; i < length; i++) {
+        printf("%d ", array[i]); // affichage de chaque élément du tableau
+    }
+    printf("\n");
+
 
 
     for(size_t i = 0; i < length; i++){
@@ -381,7 +424,7 @@ void adaptiveMerge_sort(int *array,size_t length){
 		//printf("start findrun = %ld\n",start);
         //&printf("end findrun = %ld\n",end);
 		push(stack,i,end);
-        print_stack(stack);
+        //print_stack(stack);
         
         //printf("je rentre pour la %ld dans fusion\n",i);
         //printf("fin push\n");
@@ -393,45 +436,61 @@ void adaptiveMerge_sort(int *array,size_t length){
         i = end;
 	}
 
-    for (size_t i = 0; i < length; i++) {
-        printf("%d ", array[i]); // affichage de chaque élément du tableau
-    }
-    printf("\n");
 
     StackElement temp_A;
     StackElement temp_B;
 
     int temp_A_start;
+    int temp_A_end;
     int temp_B_start;
     int temp_B_end;
+
+    printf("\n");
+    print_stack(stack);
+    printf("\n");
 
     printf("top == %d\n",stack->top);
 
     print_stack(stack);
 
     while(stack->top > 1){
+        printf("top == %d\n",stack->top);
 
-        printf("je rentre\n");
+       //printf("je rentre\n");
         temp_A = pop(stack);
         temp_B = pop(stack);
+        printf("top == %d\n",stack->top);
         
         temp_A_start = temp_A.start;
         temp_B_start = temp_B.start;
 
+        temp_A_end = temp_A.end;
         temp_B_end = temp_B.end;
 
         printf("A start = %d\n", temp_A_start);
+        printf("A end = %d\n", temp_A_end);
+        printf("B start = %d\n", temp_B_start);
         printf("B end = %d\n", temp_B_end);
 
-        merge(array,temp_A_start,temp_B_start,temp_B_end,aux);
-        push(stack,temp_A_start,temp_B_end);
+        printf("\n");
+        printf("state de la pile == %d\n",isEmpty(stack));
+        print_stack(stack);
+        printf("\n");
+
+        merge(array,temp_B_start,temp_A_start,temp_A_end,aux);
+        push(stack,temp_B_start,temp_A_end);
+        
 
     }
+    //merge(array,0,temp_A_start,length,aux);
 
-    for (size_t i = 0; i < length; i++) {
+
+    insertion(array,0,length);
+
+    /*for (size_t i = 0; i < length; i++) {
         printf("%d ", array[i]); // affichage de chaque élément du tableau
     }
-    printf("\n");
+    printf("\n");*/
 
     deleteStack(stack);
 }
