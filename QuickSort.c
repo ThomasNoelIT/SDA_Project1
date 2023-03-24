@@ -34,7 +34,7 @@ int static partitioning(int *array, int bottom, int top) {
 }
 
 void static quicksort(int *array, int bottom, int top) {
-    if (intCmp(bottom, top) < 0) {
+    if (bottom < top) {
         int pi = partitioning(array, bottom, top);
 
         quicksort(array, bottom, pi - 1);

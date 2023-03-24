@@ -31,11 +31,11 @@ static void maintain_ownership(int *array, size_t length, int i){
     int left = 2*i+1;
     int right = 2*i+2;
 
-    while (intCmp(left, (int)length) < 0 &&  intCmp(array[node], array[left]) < 0){
+    while (left < (int)length &&  intCmp(array[node], array[left]) < 0){
         node = left;
     }
 
-    while (intCmp(right, (int)length) < 0 && intCmp(array[node], array[right]) < 0 ){
+    while (right < (int)length && intCmp(array[node], array[right]) < 0 ){
         node = right;
     }
 
