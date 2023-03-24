@@ -30,7 +30,7 @@ static Stack* createStack(size_t size) {
 
     stack->max_size = size;
     stack->data = (StackElement*)malloc(sizeof(StackElement) * size);
-    stack->top = 0;
+    stack->top = -1;
     return stack;
 }
 
@@ -41,7 +41,7 @@ static int isEmpty(Stack* stack) {
 
 // Vérifie si la pile est pleine
 static int isFull(Stack* stack) {
-    return stack->top == stack->max_size;
+    return stack->top == stack->max_size-1;
 }
 
 // Ajoute un élément au sommet de la pile
@@ -98,6 +98,9 @@ static StackElement peek(Stack* stack) {
 
 // Libère la mémoire allouée pour la pile
 static void deleteStack(Stack* stack) {
+    if(stack == NULL){
+        return;
+    }
     //printf("je free les datas\n");
     free(stack->data);
     //printf("je free le stack\n");
@@ -134,22 +137,22 @@ static void insertion(int *array,int start, size_t length){
     }
 }
 
-static void merge(int tab[], int lo, int mid, int hi, int aux[])
+static void merge(int* array, int lo, int mid, int hi, int aux[])
 {
     int i = lo, j = mid;
 
     for (int k = lo; k <= hi; k++){
         if (i == mid)
-            aux[k] = tab[j++];
+            aux[k] = array[j++];
         else if (j == hi + 1)
-            aux[k] = tab[i++];
-        else if (intCmp(tab[i], tab[j]) < 0)
-            aux[k] = tab[i++];
+            aux[k] = array[i++];
+        else if (intCmp(array[i],  array[j]) < 0)
+            aux[k] = array[i++];
         else
-            aux[k] = tab[j++];
+            aux[k] = array[j++];
     }
     for (int k = lo; k <= hi; k++){
-        tab[k] = aux[k];
+        array[k] = aux[k];
     }
 }
 
@@ -169,12 +172,12 @@ static void swap_array(int *array,size_t start, size_t length) {
 int findRun(int *array, size_t start, size_t last, size_t minSize){
     
     size_t end = start;
-    //size_t length = last+start;
+    //size_t length = last-start;
     size_t length = last;
     size_t i;
 
     int temp1 = array[start];
-    int temp2 = 0;
+    int temp2 = array[start+1];
 
     //printf("length = %ld\n",length);
 
@@ -182,20 +185,20 @@ int findRun(int *array, size_t start, size_t last, size_t minSize){
     for(i = start; i < length; i++){
         //printf("start = %ld\n",start);
         //printf("end = %ld\n",end);
-        temp2 = array[i+1];
+        
         if(i+1 < last){
             //printf("state = %d\n",state);
             
-            if(i == start && intCmp(temp1, temp2) > 0){
+            if(i == start && temp1> temp2){
                 flag_state = 1;
             }
 
             if(flag_state == 0){
-                if(intCmp(temp1, temp2) < 0){
+                if(temp1< temp2){
                     end++;
                 }
 
-                if(intCmp(temp1, temp2) > 0){
+                if(temp1> temp2){
                     
                     //if(i < minSize){
                         //insertion(array,start,minSize);
@@ -204,10 +207,10 @@ int findRun(int *array, size_t start, size_t last, size_t minSize){
                     break;
                 }
             }else if(flag_state == 1){
-                if(intCmp(temp1, temp2) > 0){
+                if(temp1> temp2){
                     end++;
                 }
-                if(intCmp(temp1, temp2) < 0){
+                if(temp1< temp2){
                     //printf("je retourne le tableau\n");
                     
                     //swap_array(array,start,i);
@@ -222,6 +225,7 @@ int findRun(int *array, size_t start, size_t last, size_t minSize){
             }
         }
         temp1 = temp2;
+        temp2 = array[i+2];
     }
 /*
     size_t index_fin_tri = start;
@@ -304,15 +308,16 @@ int findRun(int *array, size_t start, size_t last, size_t minSize){
 }
 
 
-static void mergeSortAux(int tab[], int lo, int hi, int aux[])
+static void mergeSortAux(int *array, int lo, int hi, int aux[])
 {
     int n = hi - lo + 1;
     if (n <= 1)
         return;
     int mid = lo + (n + 1) / 2;
-    mergeSortAux(tab, lo, mid - 1, aux);
-    mergeSortAux(tab, mid, hi, aux);
-    merge(tab, lo, mid, hi, aux);
+    
+    mergeSortAux(array, lo, mid - 1, aux);
+    mergeSortAux(array, mid, hi, aux);
+    merge(array, lo, mid, hi, aux);
 }
 
 void static fusion(int *array, Stack* stack,size_t length){
@@ -356,6 +361,7 @@ void static fusion(int *array, Stack* stack,size_t length){
         }
     }*/
     
+
     StackElement temp_A;
     StackElement temp_B;
     StackElement temp_C;
@@ -374,12 +380,12 @@ void static fusion(int *array, Stack* stack,size_t length){
     int size_temp_C;
 
     int i = length;
-
-    /*
-    int work = 1;
-    if(stack->top < 2){
-        work = 0;
-    }*/
+    
+    
+    //int work = 1;
+    //if(stack->top < 2){
+        //work = 0;
+    //}
 
     //while(work == 1){
     if(stack->top < 2){
@@ -435,10 +441,10 @@ void static fusion(int *array, Stack* stack,size_t length){
             push(stack,temp_B_start,temp_C_end);
         }
 
-        /*
-        if(stack->top < 2){
-            work = 0;
-        }*/
+        
+        //if(stack->top < 2){
+            //work = 0;
+        //}
     }
 
     //printf("je me tire de la boucle\n");
@@ -477,7 +483,8 @@ void static adaptiveMerge_sort(int *array, Stack* stack,size_t length){
 
 
 
-    for(size_t i = 0; i < length; i++){
+    for(size_t i = 0; i < length-1; i++){
+        //printf("je rentre pour la %ld dans findrun\n",i);
         //print_stack(stack);
 		end = findRun(array, i, length, minSize);
         //printf("fin findrun\n");
@@ -486,6 +493,7 @@ void static adaptiveMerge_sort(int *array, Stack* stack,size_t length){
 		push(stack,start,end);
         i = end;
         start = end+1;
+        //printf("je rentre pour la %ld dans fusion\n",i);
         //printf("fin push\n");
         fusion(array,stack,end);
         //printf("fin fusion\n");
@@ -522,12 +530,6 @@ void static adaptiveMerge_sort(int *array, Stack* stack,size_t length){
         printf("%d ", array[i]);
     }
     printf("\n");*/
-    
-    
-
-    
-
-    
 }
 
 
